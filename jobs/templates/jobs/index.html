@@ -28,10 +28,10 @@
                     <div class="row align-items-center">
                       <div class="col-8 border-end">
                         <h3 class="card-title" style="font-size: 24px;">{{ j.title }}</h3>
-                          <h6 class="card-subtitle text-muted fw-normal mb-1" style="text-decoration: none">
+                          <h6 class="card-subtitle text-muted fw-normal mb-3" style="text-decoration: none">
                             {{ j.location }} | 
                             {% if j.isRemote %}Remote{% else %}On-site{% endif %} | 
-                            {% if j.hasVisaSponsorship %}Visa-Sponsored{% endif %} | 
+                            {% if j.hasVisaSponsorship %}Visa-Sponsored{% else %}Not Visa-Sponsored{% endif %} | 
                             ${{ j.salaryLower }} - ${{ j.salaryUpper }}
                           </h6>
                           <p class="card-text fw-bold mb-1">Job Description</p>
@@ -60,7 +60,7 @@
                 <div class="card-body">
                   <div class="row align-items-center">
                     <div class="col-8 border-end">
-                      <h3 class="card-title" style="font-size: 24px;">J: {{ j.title }}</h3>
+                      <h3 class="card-title" style="font-size: 24px;">{{ j.title }}</h3>
                         <h6 class="card-subtitle text-muted fw-normal mb-1" style="text-decoration: none">
                           {{ j.location }} | 
                           {% if j.isRemote %}Remote{% else %}On-site{% endif %} | 
