@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login as auth_login # Alias to avoid name conflict
+from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import SeekerSignupForm, RecruiterSignupForm
+from .forms import SeekerSignupForm, RecruiterSignupForm, CustomErrorList
 from .models import jobSeeker, recruiter, User
 from .forms import UserEditForm, JobSeekerProfileForm, RecruiterProfileForm
 from django.contrib.auth import logout
@@ -71,9 +71,9 @@ def edit_profile(request, username):
         user_form = UserEditForm(request.POST, instance=user_obj)
 
         if user_obj.is_job_seeker:
-            profile_form = JobSeekerProfileForm(request.POST, instance=profile_instance)
+            profile_form = JobSeekerProfileForm(request.POST, error_class=CustomErrorList, instance=profile_instance)
         elif user_obj.is_recruiter:
-            profile_form = RecruiterProfileForm(request.POST, instance=profile_instance)
+            profile_form = RecruiterProfileForm(request.POST, error_class=CustomErrorList, instance=profile_instance)
         else:
             profile_form = None
 
@@ -109,26 +109,21 @@ def logout_view(request):
 def seeker_signup(request):
     if request.method == 'POST':
         form = SeekerSignupForm(request.POST)
-
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
             user.is_job_seeker = True
             user.save()
             jobSeeker.objects.create(user=user)
-            return redirect('account.login') 
+            return redirect('account.login')
     else:
         form = SeekerSignupForm()
-    
     return render(request, 'account/seeker_signup.html', {'form': form})
     
 def recruiter_signup(request):
     if request.method == 'POST':
         form = RecruiterSignupForm(request.POST)
-
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
             user.is_recruiter = True
             user.save()
             recruiter_profile = recruiter.objects.create(user=user)
@@ -137,5 +132,4 @@ def recruiter_signup(request):
             return redirect('account.login')
     else:
         form = RecruiterSignupForm()
-    
     return render(request, 'account/recruiter_signup.html', {'form': form})
