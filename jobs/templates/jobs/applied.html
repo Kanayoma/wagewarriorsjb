@@ -3,11 +3,22 @@
 <div class="container mt-5">
     <div class="card text-center shadow-sm">
         <div class="card-body">
-            <h2 class="text-success">Application Submitted!</h2>
+            <h2>Application for {{ job.title }}</h2>
+            <h6 class="text-muted">{{ job.company }}</h6>
             <hr>
-            <p class="lead">{{ message }}</p>
-            <p>The recruitment team at <strong>{{ job.company }}</strong> will review your profile shortly.</p>
-            <a href="{% url 'jobs.index' %}" class="btn btn-secondary">Back to Job Listings</a>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="cover_letter" class="form-label">Why are you a good fit for this role?</label>
+                    <textarea class="form-control" name="cover_letter" id="cover_letter" rows="5" 
+                    placeholder="Enter your message to the recruiter..." required></textarea>
+                </div>
+                <div class="d-grip gap-2 d-md-block">
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                    <a href="{% url 'jobs.index' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

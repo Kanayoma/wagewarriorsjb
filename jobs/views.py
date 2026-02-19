@@ -40,6 +40,12 @@ def index(request):
 def apply(request, id):
     job_instance = get_object_or_404(job, id=id)
 
+    if request.method == "POST":
+        user_message = request.POST.get('cover_letter')
+        messages.success(request, f"Your application for {job_instance.title} has been sent!")
+
+        return redirect('jobs.index')
+
     context = {
         'job': job_instance,
     }
